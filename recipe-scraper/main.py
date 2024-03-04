@@ -14,7 +14,7 @@ parser.add_argument(
 parser.add_argument(
     "-c",
     "--config",
-    choices=["hellofresh"],
+    choices=["hellofresh", "justonecookbook"],
     help="Choose config for recipe scraping",
     required=True,
 )
@@ -36,17 +36,20 @@ async def main():
 
     # Scrape the recipes and save them to the output directory
     recipes = scraper.get_recipes()
-    with open(f"{output_directory}/{config}.json", "w") as file:
+    os.makedirs(f"{output_directory}/{config}", exist_ok=True)
+    with open(f"{output_directory}/{config}/raw.json", "w") as file:
         file.write(json.dumps(recipes, indent=4))
 
     # Load the recipes from the output directory and count unique recipes
-    os.makedirs(os.path.dirname(f"{output_directory}/{config}"), exist_ok=True)
     with open(f"{output_directory}/{config}/raw.json", "r") as file:
         recipes = json.load(file)
         # Get unique recipes using their id attribute
         unique_recipes = {recipe["id"]: recipe for recipe in recipes}.values()
-        # Count the number of unique recipes
-        print(f"Total unique recipes: {len(unique_recipes)}")
+
+    print(f"Scraped {len(unique_recipes)} unique recipes")
+
+    # Convert recipes into standard format and save them to the output directory
+    # TODO: Implement this part
 
 
 if __name__ == "__main__":
