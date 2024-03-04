@@ -6,6 +6,8 @@ This directory contains the application which will perform the scraping of recip
 
 * Python 3
   * Requests
+* Black formatter for Python 3
+  * https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
 
 ### Usage
 
@@ -15,13 +17,27 @@ Create a Python virtual environment:
 python -m venv env
 ```
 
+Activate the virtual environment (Powershell, Git Bash (windows), Bash/Zsh (unix)):
+
+```bash
+./env/Scripts/activate
+```
+
+```bash
+source ./env/Scripts/activate
+```
+
+```bash
+source ./env/bin/activate
+```
+
 Install all the dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the script, specifying the output location and which config to use:
+Run the script, specifying the output location, config to use:
 
 ```bash
 python main.py --output "../recipes" --config "hellofresh"
@@ -34,3 +50,9 @@ The code will automatically check for duplicates if any exists and will only sto
 ### Available Configurations
 
 * `hellofresh`
+* `justonecookbook`
+  * Get ids from star rating class
+  * https://www.justonecookbook.com/wprm_print/<id> to get recipe  
+
+### Recipe Data Model
+
