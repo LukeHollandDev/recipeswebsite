@@ -51,8 +51,6 @@ The code will automatically check for duplicates if any exists and will only sto
 
 * `hellofresh`
 * `justonecookbook`
-  * Get ids from star rating class
-  * https://www.justonecookbook.com/wprm_print/<id> to get recipe  
 
 ### Recipe Data Model
 
