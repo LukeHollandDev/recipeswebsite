@@ -1,5 +1,13 @@
 import time, json, requests
 from playwright.async_api import async_playwright
+from models import (
+    Recipe,
+    Nutrient,
+    Ingredient,
+    IngredientGroup,
+    Instruction,
+    InstructionGroup,
+)
 
 
 class HelloFresh:
@@ -18,12 +26,6 @@ class HelloFresh:
         "sort": "date",  # -date for ascending
     }
     recipe_headers = {}
-
-    async def set_bearer_from_api_request(self, request):
-        if request.url.startswith(self.recipe_api_url):
-            headers = await request.all_headers()
-            if "authorization" in headers:
-                self.bearer_token = headers["authorization"].split(" ")[1]
 
     async def set_bearer_token(self):
         # Using playwright to visit the website and watch the network requests to get the bearer token
@@ -86,3 +88,22 @@ class HelloFresh:
             return recipes
         else:
             print(f"Failed to get recipes: {response.text}")
+
+    @staticmethod
+    def transform_recipes(recipes):
+        # Remove any recipe which is just an add on
+        recipes = [recipe for recipe in recipes if not recipe.get("isAddon", False)]
+
+        transformed = []
+        for recipe in recipes:
+            pass
+
+        return transformed
+
+    # Helper methods:
+
+    async def set_bearer_from_api_request(self, request):
+        if request.url.startswith(self.recipe_api_url):
+            headers = await request.all_headers()
+            if "authorization" in headers:
+                self.bearer_token = headers["authorization"].split(" ")[1]

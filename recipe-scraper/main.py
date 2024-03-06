@@ -43,19 +43,24 @@ async def main():
     os.makedirs(f"{output_directory}/{config}", exist_ok=True)
     with open(f"{output_directory}/{config}/raw.json", "w") as file:
         print(f"Saving raw recipe data to {output_directory}/{config}/raw.json")
-        file.write(json.dumps(recipes, indent=4))
+        file.write(json.dumps(recipes, indent=2))
 
     # # Load the recipes from the output directory and count unique recipes
     # with open(f"{output_directory}/{config}/raw.json", "r") as file:
     #     recipes = json.load(file)
 
     # Get unique recipes using their id attribute
-    unique_recipes = {recipe.get("id"): recipe for recipe in recipes}.values()
+    unique_recipes = list({recipe.get("id"): recipe for recipe in recipes}.values())
 
     print(f"Scraped {len(unique_recipes)} unique recipes")
 
     # Convert recipes into standard format and save them to the output directory
-    # TODO: Implement this part
+    transformed_recipes = scraper.transform_recipes(unique_recipes)
+    transformed_recipes = [recipe.dict() for recipe in transformed_recipes if recipe]
+    with open(f"{output_directory}/{config}/recipes.json", "w") as file:
+        file.write(json.dumps(transformed_recipes, indent=2))
+
+    print(f"Saved transformed recipes: {output_directory}/{config}/recipes.json")
 
 
 if __name__ == "__main__":

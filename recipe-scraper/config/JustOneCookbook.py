@@ -1,6 +1,14 @@
 import requests, re, time, json, os
 from bs4 import BeautifulSoup
-from pprint import pprint
+from models import (
+    Recipe,
+    Nutrient,
+    Ingredient,
+    IngredientGroup,
+    Instruction,
+    InstructionGroup,
+)
+from utils import covert_float
 
 
 class JustOneCookbook:
@@ -14,7 +22,7 @@ class JustOneCookbook:
     def get_recipes(self):
         recipe_ids = self.get_recipe_ids()
 
-        ## Mock the recipe ids using raw JSON which contains a list of recipe ids
+        # # Mock the recipe ids using raw JSON which contains a list of recipe ids
         # with open("../recipes/justonecookbook/raw.json", "r") as file:
         #     recipe_ids = json.load(file)
 
@@ -24,7 +32,7 @@ class JustOneCookbook:
             response = requests.get(f"{self.recipe_url}{recipe_id}")
             response_content = response.content
 
-            ## Mock the response by loading the html from a file
+            # # Mock the response by loading the html from a file
             # with open(
             #     f"../recipes/justonecookbook/htmls/{recipe_id}.html",
             #     "r",
@@ -78,14 +86,73 @@ class JustOneCookbook:
                     )
                 ],
                 "instructions": [
-                    self.extract_instruction(index, instruction_group)
-                    for index, instruction_group in enumerate(
-                        soup.find_all("div", class_="wprm-recipe-instruction-group")
+                    self.extract_instruction(instruction_group)
+                    for instruction_group in soup.find_all(
+                        "div", class_="wprm-recipe-instruction-group"
                     )
                 ],
             }
             recipes.append(recipe)
         return recipes
+
+    @staticmethod
+    def transform_recipes(recipes):
+        transformed = []
+        for recipe in recipes:
+            nutrition = [
+                Nutrient(
+                    name=nutrient.get("name"),
+                    amount=covert_float(nutrient.get("amount"))[0],
+                    unit=nutrient.get("unit"),
+                )
+                for nutrient in recipe.get("nutrition", [])
+            ]
+            ingredients = [
+                IngredientGroup(
+                    name=ingredient.get("group_name"),
+                    ingredients=[
+                        Ingredient(
+                            name=ingred.get("name"),
+                            amount_lower=covert_float(ingred.get("amount"))[0],
+                            amount_upper=covert_float(ingred.get("amount"))[1],
+                            unit=ingred.get("unit"),
+                            note=ingred.get("note"),
+                        )
+                        for ingred in ingredient.get("ingredients", [])
+                    ],
+                )
+                for ingredient in recipe["ingredients"]
+            ]
+            instructions = [
+                InstructionGroup(
+                    name=instruction.get("group_name"),
+                    instructions=[
+                        Instruction(**instr)
+                        for instr in instruction.get("instructions", [])
+                    ],
+                )
+                for instruction in recipe["instructions"]
+            ]
+            additional_resources = []
+
+            # Remove nutrition, instructions and ingredients from recipe
+            recipe.pop("nutrition")
+            recipe.pop("ingredients")
+            recipe.pop("instructions")
+
+            transformed.append(
+                Recipe(
+                    **recipe,
+                    nutrition=nutrition,
+                    ingredients=ingredients,
+                    instructions=instructions,
+                    additional_resources=additional_resources,
+                )
+            )
+
+        return transformed
+
+    # Helper methods:
 
     def get_recipe_ids(self):
         recipe_ids = []
@@ -179,13 +246,13 @@ class JustOneCookbook:
         }
 
     @staticmethod
-    def extract_instruction(index, instruction_group):
+    def extract_instruction(instruction_group):
         group_name = instruction_group.find("h4", class_="wprm-recipe-group-name")
         group_name = group_name.text if group_name else None
 
         insructions = []
-        for instruction in instruction_group.find_all(
-            "li", class_="wprm-recipe-instruction"
+        for index, instruction in enumerate(
+            instruction_group.find_all("li", class_="wprm-recipe-instruction")
         ):
             text, image = None, None
 
