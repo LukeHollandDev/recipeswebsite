@@ -4,6 +4,7 @@ from pprint import pprint
 
 
 class JustOneCookbook:
+    name = "Just One Cookbook"
     # Bearer attributes
     bearer_required = False
     # URLs

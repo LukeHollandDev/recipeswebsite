@@ -30,7 +30,7 @@ async def main():
         print(f"Config {config} not found")
         return
 
-    print(f"Loaded config {scraper.get_name()}")
+    print(f"Loaded config {scraper.name}")
 
     # If the scraper requires a bearer token, set it using the set_bearer_token method
     if scraper.bearer_required:

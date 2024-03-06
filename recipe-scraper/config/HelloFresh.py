@@ -3,6 +3,7 @@ from playwright.async_api import async_playwright
 
 
 class HelloFresh:
+    name = "Hello Fresh"
     # Bearer attributes
     bearer_required = True
     bearer_url = "https://www.hellofresh.co.uk/recipes/search?q=chicken"
