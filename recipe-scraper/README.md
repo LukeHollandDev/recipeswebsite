@@ -54,3 +54,8 @@ The code will automatically check for duplicates if any exists and will only sto
 
 ### Recipe Data Model
 
+The model can be found in the Pydantic model file: `models/Recipe.py`.
+
+This is the structure the configurations use to structure their recipes before storing them in the file.
+
+You can find examples of these recipe files inside of `recipes` directory.
