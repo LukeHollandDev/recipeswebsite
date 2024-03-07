@@ -5,4 +5,5 @@ from .Recipe import (
     IngredientGroup,
     Instruction,
     InstructionGroup,
+    Resource,
 )

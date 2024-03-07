@@ -7,6 +7,7 @@ from models import (
     IngredientGroup,
     Instruction,
     InstructionGroup,
+    Resource,
 )
 
 
@@ -26,6 +27,10 @@ class HelloFresh:
         "sort": "date",  # -date for ascending
     }
     recipe_headers = {}
+    # Other
+    image_host = (
+        "https://img.hellofresh.com/w_384,q_auto,f_auto,c_limit,fl_lossy/hellofresh_s3"
+    )
 
     async def set_bearer_token(self):
         # Using playwright to visit the website and watch the network requests to get the bearer token
@@ -89,14 +94,115 @@ class HelloFresh:
         else:
             print(f"Failed to get recipes: {response.text}")
 
-    @staticmethod
-    def transform_recipes(recipes):
-        # Remove any recipe which is just an add on
-        recipes = [recipe for recipe in recipes if not recipe.get("isAddon", False)]
+    def transform_recipes(self, recipes):
+        # Remove any recipe which is just an add on or has empty ingredients or yields
+        recipes = [
+            recipe
+            for recipe in recipes
+            if not recipe.get("isAddon", False)
+            and recipe.get("ingredients", []) != []
+            and recipe.get("yields", []) != []
+        ]
 
         transformed = []
         for recipe in recipes:
-            pass
+            nutrition = [
+                Nutrient(**nutrient) for nutrient in recipe.get("nutrition", [])
+            ]
+
+            # Build list of ingredient ids mapped to names
+            ingredient_map = {}
+            for ingredient in recipe.get("ingredients", []):
+                ingredient_map[ingredient.get("id")] = ingredient.get("name")
+
+            # Get the ingredient amounts from the yields = 2 in yields
+            yields = recipe.get("yields", [])
+            # Potentially invalid if it does not have any yields
+            if len(yields) == 0:
+                continue
+            # If the yields dont have units then it is not useful
+            if not (
+                yields[0].get("ingredients", [])
+                and len(yields[0].get("ingredients", [])) > 0
+            ):
+                continue
+
+            # Build the ingredients list using the yields and ingredient map
+            ingredients = [
+                IngredientGroup(
+                    name=None,
+                    ingredients=[
+                        Ingredient(
+                            name=ingredient_map.get(ingred_yield.get("id")),
+                            amount_lower=(
+                                float(ingred_yield.get("amount"))
+                                if ingred_yield.get("amount")
+                                else None
+                            ),
+                            amount_upper=(
+                                float(ingred_yield.get("amount"))
+                                if ingred_yield.get("amount")
+                                else None
+                            ),
+                            unit=ingred_yield.get("unit"),
+                            note=None,
+                        )
+                        for ingred_yield in yields[0].get("ingredients", [])
+                    ],
+                )
+            ]
+
+            # Has no instructions / steps in the recipe, ignore the recipe
+            if len(recipe.get("steps", [])) == 0:
+                continue
+
+            instructions = [
+                InstructionGroup(
+                    name=None,
+                    instructions=[
+                        Instruction(
+                            index=index,
+                            text=step.get("instructions"),
+                            image=(
+                                f"{self.image_host}{step.get('images', [])[0].get('path')}"
+                                if len(step.get("images", [])) > 0
+                                else None
+                            ),
+                        )
+                        for index, step in enumerate(recipe.get("steps", []))
+                    ],
+                )
+            ]
+
+            additional_resources = []
+            if recipe.get("cardLink"):
+                additional_resources.append(
+                    Resource(
+                        name="Recipe Card PDF", type="PDF", value=recipe.get("cardLink")
+                    )
+                )
+
+            cuisine = None
+            if recipe.get("cuisines", []):
+                cuisine = recipe.get("cuisines", [])[0].get("name")
+
+            transformed.append(
+                Recipe(
+                    id=recipe.get("id"),
+                    title=recipe.get("name"),
+                    description=recipe.get("description"),
+                    url=recipe.get("websiteUrl"),
+                    image=f"{self.image_host}{recipe.get('imagePath')}",
+                    cuisine=cuisine,
+                    prepTime=recipe.get("prepTime"),
+                    totalTime=recipe.get("totalTime"),
+                    servings=yields[0].get("yields"),
+                    nutrition=nutrition,
+                    ingredients=ingredients,
+                    instructions=instructions,
+                    additional_resources=additional_resources,
+                )
+            )
 
         return transformed
 

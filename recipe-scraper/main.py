@@ -45,9 +45,9 @@ async def main():
         print(f"Saving raw recipe data to {output_directory}/{config}/raw.json")
         file.write(json.dumps(recipes, indent=2))
 
-    # # Load the recipes from the output directory and count unique recipes
-    # with open(f"{output_directory}/{config}/raw.json", "r") as file:
-    #     recipes = json.load(file)
+    # Load the recipes from the output directory and count unique recipes
+    with open(f"{output_directory}/{config}/raw.json", "r") as file:
+        recipes = json.load(file)
 
     # Get unique recipes using their id attribute
     unique_recipes = list({recipe.get("id"): recipe for recipe in recipes}.values())
@@ -60,6 +60,9 @@ async def main():
     with open(f"{output_directory}/{config}/recipes.json", "w") as file:
         file.write(json.dumps(transformed_recipes, indent=2))
 
+    print(
+        f"Transformed {len(transformed_recipes)} of the {len(unique_recipes)} recipes found."
+    )
     print(f"Saved transformed recipes: {output_directory}/{config}/recipes.json")
 
 
