@@ -12,6 +12,8 @@ OG HelloFreshed:
 * FastAPI for the backend
   * Python
   * PostgreSQL
+    * SQLModel
+    * Alembic 
 * React for the frontend
   * Typescript
   * MUI (Material UI)
@@ -42,3 +44,11 @@ Other more technical features:
   * Need to look out and view how to retrieve these and make them work with other recipes
 * User submitted recipes
   * Eventually allow users to submit recipes
+
+### Running Developer Environment
+
+There is a docker-compose file which can be used to quickly spin up an environment for the website.
+
+You can run it by using this command from the root directory: `docker-compose -f .\docker-compose-dev.yml up -d`.
+
+*Required docker to be installed on your system.*
