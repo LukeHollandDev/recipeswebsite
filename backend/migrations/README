@@ -1,0 +1,7 @@
+# Alembic Migrations
+
+To perform a migration make sure to have the environment variable set for the database URL.
+
+Environment variable: `DATABASE_URL`
+
+Then run this command `alembic revision --autogenerate -m "<migration information>"`   
