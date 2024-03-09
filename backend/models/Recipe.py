@@ -1,6 +1,6 @@
-from typing import Optional
-from sqlmodel import SQLModel, Field
-from . import Nutrient, Ingredient, Instruction, Resource
+from typing import List, Optional
+from sqlmodel import SQLModel, Field, Relationship
+from models import Nutrient, Ingredient, Instruction, Resource
 
 
 class Recipe(SQLModel, table=True):
@@ -13,7 +13,7 @@ class Recipe(SQLModel, table=True):
     prepTime: Optional[str]
     totalTime: Optional[str]
     servings: Optional[float]
-    # add list of nutrition
-    # add list of ingredients
-    # add list of instructions
-    # add list of resources
+    nutrients: List[Nutrient.Nutrient] = Relationship()
+    ingredient_groups: List[Ingredient.IngredientGroup] = Relationship()
+    instruction_groups: List[Instruction.InstructionGroup] = Relationship()
+    resources: List[Resource.Resource] = Relationship()

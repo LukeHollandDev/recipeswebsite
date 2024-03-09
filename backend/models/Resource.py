@@ -7,3 +7,4 @@ class Resource(SQLModel, table=True):
     name: Optional[str]
     type: Optional[str] = Field(index=True)
     value: Optional[str]
+    recipe_id: int = Field(foreign_key="recipe.id")

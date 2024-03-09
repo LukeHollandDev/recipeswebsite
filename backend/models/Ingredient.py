@@ -17,3 +17,4 @@ class IngredientGroup(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: Optional[str]
     ingredients: List[Ingredient] = Relationship(back_populates="group")
+    recipe_id: int = Field(foreign_key="recipe.id")
