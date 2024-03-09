@@ -6,7 +6,7 @@ from alembic import context
 from sqlmodel import SQLModel
 
 # Import our custom models
-from models import *
+from models import Recipe, Ingredient, Instruction, Nutrient, Resource
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -33,8 +33,6 @@ config.set_main_option(
     "sqlalchemy.url",
     os.environ.get("DATABASE_URL") or config.get_main_option("sqlalchemy.url"),
 )
-
-print(os.environ.get("DATABASE_URL"))
 
 
 def run_migrations_offline() -> None:

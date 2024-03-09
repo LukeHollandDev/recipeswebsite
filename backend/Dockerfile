@@ -1,17 +1,18 @@
 # pull official base image
 FROM python:3.11-slim-buster
 
+# Set environment varibles
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 # set working directory
 WORKDIR /usr/src/app
 
-# install system dependencies
-RUN apt-get update \
-  && apt-get -y install netcat gcc postgresql \
-  && apt-get clean
+# update system dependencies
+RUN apt-get update && apt-get clean
 
 # add app
 COPY . .
 
 # install python dependencies
 RUN pip install -r requirements.txt
-
