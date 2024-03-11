@@ -45,7 +45,7 @@ python main.py --output "../recipes" --config "hellofresh"
 
 Once executed the script will show the progress in the terminal / command prompt and then will store the recipes inside of the output directory provided in the command. They will be stored in the in a directory named the same as the config used.
 
-The code will automatically check for duplicates if any exists and will only store new recipes.
+The code will automatically check for duplicates if any exists and will only store unique recipes.
 
 ### Available Configurations
 
