@@ -6,7 +6,16 @@ from alembic import context
 from sqlmodel import SQLModel
 
 # Import our custom models
-from models import Recipe, Ingredient, Instruction, Nutrient, Resource
+from models import (
+    Recipe,
+    Ingredient,
+    Instruction,
+    Nutrient,
+    Resource,
+    User,
+    Favourite,
+    RecipeListItem,
+)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
