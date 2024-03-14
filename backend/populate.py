@@ -1,4 +1,4 @@
-import os, json
+import os, json, time
 from sqlmodel import create_engine, Session
 
 from models import Recipe, Nutrient, Ingredient, Instruction, Resource
@@ -21,6 +21,9 @@ if not database_url:
 
 # Create the database engine
 engine = create_engine(database_url)
+
+# Get time started, so can get total time at the end
+start_time = time.time()
 
 # Create a session
 with Session(engine) as session:
@@ -111,3 +114,9 @@ with Session(engine) as session:
 
     # Reset print, by printing final progress bar
     print(f"{recipe_count} / {recipe_count}")
+
+# Calculate and print the total time taken
+total_time = time.time() - start_time
+minutes = int(total_time // 60)
+seconds = int(total_time % 60)
+print(f"Total time taken: {minutes} minutes and {seconds} seconds")
