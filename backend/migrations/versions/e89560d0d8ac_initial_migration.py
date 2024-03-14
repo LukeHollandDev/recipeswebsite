@@ -64,8 +64,8 @@ def upgrade() -> None:
     sa.Column('url', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('image', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
     sa.Column('cuisine', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('prepTime', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-    sa.Column('totalTime', sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+    sa.Column('prepTime', sa.Integer(), nullable=True),
+    sa.Column('totalTime', sa.Integer(), nullable=True),
     sa.Column('servings', sa.Float(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )

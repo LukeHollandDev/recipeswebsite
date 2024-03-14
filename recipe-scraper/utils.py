@@ -1,4 +1,4 @@
-import unicodedata
+import unicodedata, re
 
 vulgar_fractions = {
     "\u00BC": 1 / 4,  # ¼
@@ -21,6 +21,8 @@ vulgar_fractions = {
     "\u215E": 7 / 8,  # ⅞
     "\u215F": 1,  # ⅟
 }
+
+time_units = {"hour": 60, "minute": 1, "H": 60, "M": 1}
 
 
 # Converts string to flow and returns as a range
@@ -80,3 +82,32 @@ def covert_float(string):
         )
 
     return float(string), float(string)
+
+
+# Convers a time string to integer representing minutes
+# Returns integer
+def convert_to_minutes(time_str):
+    if not time_str:
+        return time_str
+
+    # Define regular expression patterns to extract the number and time unit
+    patterns = [r"(\d+)\s*(hour|minute)s?", r"PT(\d+)H(\d+)M", r"PT(\d+)([HM])"]
+
+    for pattern in patterns:
+        matches = re.match(pattern, time_str)
+        if matches:
+            if pattern == patterns[1]:
+                hours, minutes = int(matches.group(1)), int(matches.group(2))
+                return (hours * 60) + minutes
+
+            # Extract the number and time unit from the match
+            quantity = int(matches.group(1))
+            unit = matches.group(2)
+
+            # Calculate the equivalent minutes
+            if unit in time_units:
+                return quantity * time_units[unit]
+            else:
+                return None
+
+    return None

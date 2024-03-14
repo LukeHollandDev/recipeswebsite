@@ -1,4 +1,4 @@
-import requests, re, time, json, os
+import requests, re, time
 from bs4 import BeautifulSoup
 from models import (
     Recipe,
@@ -8,7 +8,7 @@ from models import (
     Instruction,
     InstructionGroup,
 )
-from utils import covert_float
+from utils import covert_float, convert_to_minutes
 
 
 class JustOneCookbook:
@@ -22,23 +22,11 @@ class JustOneCookbook:
     def get_recipes(self):
         recipe_ids = self.get_recipe_ids()
 
-        # # Mock the recipe ids using raw JSON which contains a list of recipe ids
-        # with open("../recipes/justonecookbook/raw.json", "r") as file:
-        #     recipe_ids = json.load(file)
-
         # Scrape the recipes using the recipe ids
         recipes = []
         for recipe_id in recipe_ids:
             response = requests.get(f"{self.recipe_url}{recipe_id}")
             response_content = response.content
-
-            # # Mock the response by loading the html from a file
-            # with open(
-            #     f"../recipes/justonecookbook/htmls/{recipe_id}.html",
-            #     "r",
-            #     encoding="utf-8",
-            # ) as file:
-            #     response_content = file.read()
 
             soup = BeautifulSoup(response_content, "html.parser")
 
@@ -101,7 +89,7 @@ class JustOneCookbook:
         for recipe in recipes:
             nutrition = [
                 Nutrient(
-                    name=nutrient.get("name"),
+                    name=nutrient.get("name").replace(": ", ""),
                     amount=covert_float(nutrient.get("amount"))[0],
                     unit=nutrient.get("unit"),
                 )
@@ -139,6 +127,10 @@ class JustOneCookbook:
             recipe.pop("nutrition")
             recipe.pop("ingredients")
             recipe.pop("instructions")
+
+            # Convert the prep and total into integer minutes
+            recipe["prepTime"] = convert_to_minutes(recipe.get("prepTime"))
+            recipe["totalTime"] = convert_to_minutes(recipe.get("totalTime"))
 
             transformed.append(
                 Recipe(

@@ -27,12 +27,13 @@ with Session(engine) as session:
     recipe_count = len(recipes)
     # Iterate over the data and insert it into the database
     for i, recipe in enumerate(recipes):
-        # Print a progress bar
+        # Show the progress
         print(f"{i + 1} / {recipe_count}", end="\r")
 
         # Create recipe and commit so id is available
         recipe_model = Recipe.Recipe(
             id_other=recipe.get("id"),
+            title=recipe.get("title"),
             description=recipe.get("description"),
             url=recipe.get("url"),
             image=recipe.get("image"),

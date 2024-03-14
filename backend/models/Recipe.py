@@ -11,8 +11,8 @@ class Recipe(SQLModel, table=True):
     url: Optional[str]
     image: Optional[str]
     cuisine: Optional[str] = Field(index=True)
-    prepTime: Optional[str]
-    totalTime: Optional[str]
+    prepTime: Optional[int]
+    totalTime: Optional[int]
     servings: Optional[float]
     nutrients: List[Nutrient.Nutrient] = Relationship()
     ingredient_groups: List[Ingredient.IngredientGroup] = Relationship()

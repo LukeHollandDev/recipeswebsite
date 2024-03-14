@@ -1,4 +1,4 @@
-import time, json, requests
+import time, requests
 from playwright.async_api import async_playwright
 from models import (
     Recipe,
@@ -9,6 +9,7 @@ from models import (
     InstructionGroup,
     Resource,
 )
+from utils import convert_to_minutes
 
 
 class HelloFresh:
@@ -185,6 +186,13 @@ class HelloFresh:
             cuisine = None
             if recipe.get("cuisines", []):
                 cuisine = recipe.get("cuisines", [])[0].get("name")
+
+            # Convert the prep and total into integer minutes
+            recipe["prepTime"] = convert_to_minutes(recipe.get("prepTime"))
+            # totalTime in hello fresh is actually cooking time, so combine prep and cook time
+            recipe["totalTime"] = convert_to_minutes(recipe.get("totalTime"))
+            if recipe["totalTime"]:
+                recipe["totalTime"] = recipe["totalTime"] + recipe["prepTime"]
 
             transformed.append(
                 Recipe(
