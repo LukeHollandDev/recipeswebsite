@@ -6,6 +6,7 @@ from models import Nutrient, Ingredient, Instruction, Resource
 class Recipe(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     id_other: str = Field(index=True)
+    title: str = Field(index=True)
     description: str
     url: Optional[str]
     image: Optional[str]

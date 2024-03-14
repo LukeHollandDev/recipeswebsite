@@ -1,7 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlmodel import Session, select
-from models.Ingredient import IngredientGroup, Ingredient
 from models.Recipe import Recipe
 from database import get_session
 
