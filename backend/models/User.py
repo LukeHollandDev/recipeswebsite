@@ -10,3 +10,14 @@ class User(SQLModel, table=True):
     password_hash: str
     recipe_list: List[Favourite.Favourite] = Relationship()
     favourite_recipes: List[RecipeListItem.RecipeListItem] = Relationship()
+
+
+class UserRegister(SQLModel):
+    username: str
+    email: str
+    password: str
+
+
+class UserLogin(SQLModel):
+    username: str
+    password: str

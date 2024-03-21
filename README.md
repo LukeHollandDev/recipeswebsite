@@ -49,6 +49,13 @@ Other more technical features:
 
 There is a docker-compose file which can be used to quickly spin up an environment for the website.
 
-You can run it by using this command from the root directory: `docker-compose -f .\docker-compose-dev.yml up -d`.
+There are a few environment variables required, there is a sample .env.sample file which contains the required ones.
 
-*Required docker to be installed on your system.*
+These values should be replaced with their actual values, inside of a `.env` file.
+
+* DATABASE_URL (set inside of the compose itself)
+* BACKEND_SECRET_KEY (required in .env)
+
+You can run it by using this command from the root directory: `docker-compose -f .\docker-compose-dev.yml --env-file ./config/.env.dev up -d`.
+
+*Required docker to be installed on your system and a `.env` file called `.env.dev` inside of a `config` directory**
