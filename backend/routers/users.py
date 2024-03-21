@@ -230,7 +230,24 @@ def favourite_recipe(
     db_session: Session = Depends(get_session),
     user: User = Depends(authenticate),
 ):
-    # Add code to remvove recipe from user's recipe list
+    # Check if the recipe is on the user's list
+    recipe_list_item = db_session.exec(
+        select(RecipeListItem.RecipeListItem).where(
+            and_(
+                RecipeListItem.RecipeListItem.recipe_id == recipe_id,
+                RecipeListItem.RecipeListItem.user_id == user.id,
+            )
+        )
+    ).first()
+    if not recipe_list_item:
+        raise HTTPException(
+            status_code=404, detail="Recipe is not currently on the user's list."
+        )
+
+    # Delete the recipe list item
+    db_session.delete(recipe_list_item)
+    db_session.commit()
+
     return {"message": "Successfully removed the recipe from the user's list."}
 
 
@@ -282,7 +299,24 @@ def favourite_recipe(
     db_session: Session = Depends(get_session),
     user: User = Depends(authenticate),
 ):
-    # Add code to 'unfavourite' a recipe
+    # Check if the recipe is on the user's list
+    favourite_recipe = db_session.exec(
+        select(Favourite.Favourite).where(
+            and_(
+                Favourite.Favourite.recipe_id == recipe_id,
+                Favourite.Favourite.user_id == user.id,
+            )
+        )
+    ).first()
+    if not favourite_recipe:
+        raise HTTPException(
+            status_code=404, detail="User has not got this recipe favourited."
+        )
+
+    # Delete the favourite recipe
+    db_session.delete(favourite_recipe)
+    db_session.commit()
+
     return {"message": "Successfully unfavourited the recipe."}
 
 
