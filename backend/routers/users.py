@@ -95,6 +95,11 @@ def authenticate(
     return user
 
 
+@router.get("/")
+def get_current_user(user: User = Depends(authenticate)):
+    return {**user.model_dump(exclude={"password_hash": True})}
+
+
 @router.post("/register")
 def register_user(
     user: User.UserRegister,
@@ -217,12 +222,25 @@ def favourite_recipe(
     pass
 
 
-@router.get("/")
-def get_current_user(user: User = Depends(authenticate)):
+@router.get("/id/{user_id}")
+def get_user_by_id(user_id: int, db_session: Session = Depends(get_session)):
+    # Get the user from the database
+    user = db_session.exec(select(User.User).where(User.User.id == user_id)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found with provided id.")
+
     return {**user.model_dump(exclude={"password_hash": True})}
 
 
-@router.get("/{user_id}")
-def get_user_by_id(user_id: int, db_session: Session = Depends(get_session)):
-    # Add code to get a user by id
-    pass
+@router.get("/username/{username}")
+def get_user_by_id(username: str, db_session: Session = Depends(get_session)):
+    # Get the user from the database
+    user = db_session.exec(
+        select(User.User).where(User.User.username == username)
+    ).first()
+    if not user:
+        raise HTTPException(
+            status_code=404, detail="User not found with provided username."
+        )
+
+    return {**user.model_dump(exclude={"password_hash": True})}
