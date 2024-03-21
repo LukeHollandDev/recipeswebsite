@@ -8,8 +8,8 @@ class User(SQLModel, table=True):
     username: str = Field(index=True)
     email: Optional[str]
     password_hash: str
-    recipe_list: List[Favourite.Favourite] = Relationship()
-    favourite_recipes: List[RecipeListItem.RecipeListItem] = Relationship()
+    recipe_list: List[RecipeListItem.RecipeListItem] = Relationship()
+    favourite_recipes: List[Favourite.Favourite] = Relationship()
 
 
 class UserRegister(SQLModel):
