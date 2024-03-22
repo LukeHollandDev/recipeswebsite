@@ -2,7 +2,7 @@
 
 This directory contains the code for the backend of HelloFreshed 2.
 
-### Running Locally
+## Running Locally
 
 To run this code locally you can either;
 
@@ -15,7 +15,7 @@ To run this code locally you can either;
   * Install dependencies `pip install -r requirements.txt`
   * You will need to setup a Postgres database and ensure you have `DATABASE_URL` environment variable setup with the URL to the database
 
-### Population Script
+## Population Script
 
 With a database running and the environment variable set, the population script can be run to add recipes to the database.
 
@@ -25,10 +25,50 @@ Run `python populate.py` from the `backend` directory while in the virtual envir
 
 Since this uses the `recipe.json` files from the `recipes` directory they must exist and have content.
 
-### Alembic Migrations
+## Alembic Migrations
 
 Database migrations are managed by Alembic.
 
 * Upgrading database to latest migration run `alembic upgrade head` while in the virutal environment setup earlier.
 * Creating a new migration (usually after updating the SQLModels in `backend/models` directory)
   * Run `alembic revision --autogenerate -m "<migration information>"`  while in the virutal environment setup earlier.
+
+## API Routes
+
+### User routes
+
+* /users
+  * GET /
+    * Required authentication token
+  * GET /id/{user_id: integer}
+  * GET /username/{username: string}
+  * POST /register
+    * Request body:
+      * username: string
+      * email: string, email
+      * password: string, upper case + lower case + number + special character
+  * POST /login
+    * Request body:
+      * username: string
+      * password: string
+  * GET /recipe-list
+    * Required authentication token
+  * POST /recipe-list/{recipe_id: integer}
+    * Required authentication token
+  * DELETE /recipe-list/{recipe_id: integer}
+    * Required authentication token
+  * GET /favourites
+    * Required authentication token
+  * POST /favoutie/{recipe_id: integer}
+    * Required authentication token
+  * DELETE /favoutie/{recipe_id: integer}
+    * Required authentication token
+
+### Recipe routes
+
+* /recipes
+  * GET /{recipe_id: integer}
+  * GET /
+    * URL parameters:
+      * skip: integer
+      * limit: integer
