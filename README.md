@@ -56,6 +56,6 @@ These values should be replaced with their actual values, inside of a `.env` fil
 * DATABASE_URL (set inside of the compose itself)
 * BACKEND_SECRET_KEY (required in .env)
 
-You can run it by using this command from the root directory: `docker-compose -f .\docker-compose-dev.yml --env-file ./config/.env.dev up -d`.
+You can run it by using this command from the root directory: `docker-compose -f .\docker-compose-dev.yml --env-file ./config/.env.local up -d`.
 
-*Required docker to be installed on your system and a `.env` file called `.env.dev` inside of a `config` directory**
+*Required docker to be installed on your system and a `.env` file called `.env.local` inside of a `config` directory**
