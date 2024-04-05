@@ -21,3 +21,12 @@ To lint and test the project;
 * Test `npm run test`
 
 *Tests need to be added/implemented.*
+
+## Project Layout (src directory)
+
+* assets/ - shared assets like images
+* components/ - re-usable components of the site
+* routes/ - pages
+* routeTree.gen.ts - auto generated route configuration
+* vite-env.d.ts - vite typescript typing
+* app.tsx - application entry point
