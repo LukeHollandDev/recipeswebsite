@@ -7,8 +7,9 @@ This directory contains the code for the backend of HelloFreshed 2.
 To run this code locally you can either;
 
 * Run the `docker-compose-dev.yml` which will spin up a Postgres database and Python container
-  * From root directory run `docker-compose -f .\docker-compose-dev.yml up -d`
+  * From root directory run `docker-compose -f .\docker-compose-dev.yml --env-file ./config/.env up -d`
     * Requires docker enginer, which can be installed from https://docs.docker.com/engine/install/ (Docker desktop is recommended)
+    * `.env` required with the variables from `.env.sample`
 * Install the Python dependencies and run the API directly in your terminal
   * Create virtual environment `python -m venv env`
   * Activate the environment `source ./env/bin/activate` (`./env/Scripts/activate` on Windows)

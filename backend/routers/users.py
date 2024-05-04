@@ -51,7 +51,7 @@ def register_user(
         )
     ).first()
     if existing_user:
-        raise HTTPException(status_code=409, detail="Email or password already in use.")
+        raise HTTPException(status_code=409, detail="Email or username already in use.")
 
     # Hash the password
     password_hash = pwd_context.hash(user.password)

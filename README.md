@@ -53,8 +53,8 @@ There are a few environment variables required, there is a sample .env.sample fi
 
 These values should be replaced with their actual values, inside of a `.env` file.
 
-* DATABASE_URL (set inside of the compose itself)
-* BACKEND_SECRET_KEY (required in .env)
+* DATABASE_URL
+* BACKEND_SECRET_KEY
 
 You can run it by using this command from the root directory: `docker-compose -f .\docker-compose-dev.yml --env-file ./config/.env.local up -d`.
 
