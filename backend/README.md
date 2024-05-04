@@ -52,17 +52,17 @@ Database migrations are managed by Alembic.
     * Request body:
       * username: string
       * password: string
-  * GET /recipe-list
+  * GET /recipe_list
     * Required authentication token
-  * POST /recipe-list/{recipe_id: integer}
+  * POST /recipe_list/{recipe_id: integer}
     * Required authentication token
-  * DELETE /recipe-list/{recipe_id: integer}
+  * DELETE /recipe_list/{recipe_id: integer}
     * Required authentication token
   * GET /favourites
     * Required authentication token
-  * POST /favoutie/{recipe_id: integer}
+  * POST /favourite/{recipe_id: integer}
     * Required authentication token
-  * DELETE /favoutie/{recipe_id: integer}
+  * DELETE /favourite/{recipe_id: integer}
     * Required authentication token
 
 ### Recipe routes
