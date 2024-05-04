@@ -67,7 +67,7 @@ def register_user(
     token = create_jwt(new_user)
 
     # Return user (without the password_hash) and set-cookie header with token
-    response.set_cookie(key="access_token", value=f"Bearer {token}", httponly=True)
+    response.set_cookie(key="access_token", value=f"{token}", httponly=True)
     return {**new_user.model_dump(exclude={"password_hash": True})}
 
 
@@ -100,7 +100,7 @@ def login_user(
     token = create_jwt(existing_user)
 
     # Return user (without the password_hash) and set-cookie header with token
-    response.set_cookie(key="access_token", value=f"Bearer {token}", httponly=True)
+    response.set_cookie(key="access_token", value=f"{token}", httponly=True)
     return {**existing_user.model_dump(exclude={"password_hash": True})}
 
 
