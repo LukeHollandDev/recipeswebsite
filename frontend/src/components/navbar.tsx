@@ -11,8 +11,8 @@ export default function Navbar({ Links }: { Links: JSX.Element[] }) {
 
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal mx-4 gap-2">
-          {Links.map((Link) => (
-            <li>{Link}</li>
+          {Links.map((Link, index) => (
+            <li key={`nav-link-${index}`}>{Link}</li>
           ))}
         </ul>
       </div>
