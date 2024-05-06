@@ -68,7 +68,10 @@ def register_user(
 
     # Return user (without the password_hash) and set-cookie header with token
     response.set_cookie(key="access_token", value=f"{token}", httponly=True)
-    return {**new_user.model_dump(exclude={"password_hash": True})}
+    return {
+        **existing_user.model_dump(exclude={"password_hash": True}),
+        "access_token": token,
+    }
 
 
 @router.post("/login")
@@ -100,8 +103,13 @@ def login_user(
     token = create_jwt(existing_user)
 
     # Return user (without the password_hash) and set-cookie header with token
-    response.set_cookie(key="access_token", value=f"{token}", httponly=True)
-    return {**existing_user.model_dump(exclude={"password_hash": True})}
+    response.set_cookie(
+        key="access_token", value=f"{token}", httponly=True, domain="localhost"
+    )
+    return {
+        **existing_user.model_dump(exclude={"password_hash": True}),
+        "access_token": token,
+    }
 
 
 @router.get("/recipe_list")

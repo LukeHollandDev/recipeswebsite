@@ -1,7 +1,6 @@
 import { useState, FormEvent, ChangeEvent } from "react";
 import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
-import { useAuth } from "../hooks/useAuth";
 
 interface User {
   username: string;
@@ -18,8 +17,6 @@ export const Route = createLazyFileRoute("/login")({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [error, setError] = useState("");
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { login } = useAuth();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const navigate = useNavigate({ from: "/login" });
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +32,8 @@ export const Route = createLazyFileRoute("/login")({
         })
         .then((response) => {
           if (response.status === 200) {
-            login(response.data);
+            console.log(response.data);
+            // TODO: set user and store access token
             navigate({ to: "/" });
           }
         })
@@ -87,7 +85,7 @@ export const Route = createLazyFileRoute("/login")({
           <div className="form-control mt-3 gap-2">
             <button className="btn btn-primary">Login</button>
           </div>
-          <Link to="/register" className="btn btn-base-300">
+          <Link to="/" className="btn btn-base-300">
             Register
           </Link>
         </form>
