@@ -1,16 +1,30 @@
 import { useState, FormEvent, ChangeEvent } from "react";
-import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
 import axios from "axios";
+import { User } from "../util/types";
+import { isAuthenticated, login } from "../util/authentication";
 
-interface User {
+interface UserLogin {
   username: string;
   password: string;
 }
 
-export const Route = createLazyFileRoute("/login")({
+export const Route = createFileRoute("/login")({
+  beforeLoad: async () => {
+    if (await isAuthenticated()) {
+      throw redirect({
+        to: "/",
+      });
+    }
+  },
   component: () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [user, setUser] = useState<User>({
+    const [user, setUser] = useState<UserLogin>({
       username: "",
       password: "",
     });
@@ -25,15 +39,13 @@ export const Route = createLazyFileRoute("/login")({
 
     const handleLogin = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-
       axios
         .post(`${import.meta.env.VITE_API_URL}/users/login`, user, {
           headers: { "Content-Type": "application/json" },
         })
         .then((response) => {
           if (response.status === 200) {
-            console.log(response.data);
-            // TODO: set user and store access token
+            login(response.data as User, response.data.access_token);
             navigate({ to: "/" });
           }
         })

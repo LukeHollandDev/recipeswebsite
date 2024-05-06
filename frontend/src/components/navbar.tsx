@@ -1,6 +1,27 @@
 import { Link } from "@tanstack/react-router";
+import { isAuthenticated, logout } from "../util/authentication";
+import { getUser } from "../util/localstorage";
+import { useEffect, useState } from "react";
+import { User } from "../util/types";
 
 export default function Navbar({ Links }: { Links: JSX.Element[] }) {
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    async function getAuthenticatedUser() {
+      if (await isAuthenticated()) {
+        const tempUser = getUser();
+        if (tempUser) {
+          setUser(tempUser);
+        }
+      }
+    }
+    if (!user) {
+      getAuthenticatedUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -18,9 +39,15 @@ export default function Navbar({ Links }: { Links: JSX.Element[] }) {
       </div>
 
       <div className="navbar-end">
-        <Link to="/login" className="btn btn-ghost">
-          Login
-        </Link>
+        {user ? (
+          <button onClick={logout} className="btn btn-ghost">
+            Logout
+          </button>
+        ) : (
+          <Link to="/login" className="btn btn-ghost">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
