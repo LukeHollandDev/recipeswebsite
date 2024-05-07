@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
+import { Route as RecipeRecipeIdImport } from './routes/recipe/$recipeId'
 
 // Create Virtual Routes
 
@@ -43,6 +44,11 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const RecipeRecipeIdRoute = RecipeRecipeIdImport.update({
+  path: '/recipe/$recipeId',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -63,6 +69,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/recipe/$recipeId': {
+      preLoaderRoute: typeof RecipeRecipeIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -73,6 +83,7 @@ export const routeTree = rootRoute.addChildren([
   LoginRoute,
   RegisterRoute,
   AboutLazyRoute,
+  RecipeRecipeIdRoute,
 ])
 
 /* prettier-ignore-end */

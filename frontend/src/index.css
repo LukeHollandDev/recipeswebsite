@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.recipe-image {
+    background-image: url('assets/loading-icon.png');
+    width: 100%;
+    aspect-ratio: 3/2;
+}
