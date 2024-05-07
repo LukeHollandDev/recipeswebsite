@@ -1,6 +1,6 @@
 import axios from "axios";
 import { User } from "./types";
-import { clearTokenUser, getToken, setToken, setUser } from "./localstorage";
+import { clearUser, getUser } from "./localstorage";
 
 // Takes token and validates it to make sure it's valid, returns user obj if valid.
 export async function authenticate(token: string): Promise<void | User> {
@@ -9,7 +9,8 @@ export async function authenticate(token: string): Promise<void | User> {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then((response) => {
-      return response.data as User;
+      // /users/ endpoint does not include the token in response
+      return { ...response.data, access_token: token } as User;
     })
     .catch((error) => {
       const { status, data } = error.response;
@@ -22,22 +23,16 @@ export async function authenticate(token: string): Promise<void | User> {
 
 // Helper function which gets token and uses it to try and authenticate.
 export async function isAuthenticated(): Promise<boolean> {
-  const token = getToken();
+  const token = getUser()?.access_token;
   if (token) {
     return (await authenticate(token)) ? true : false;
   }
   return false;
 }
 
-// "Logs in" a user by setting user and token local storage.
-export async function login(user: User, token: string) {
-  setUser(user);
-  setToken(token);
-  window.location.reload();
-}
-
-// "Logs out" a user by removing the token and user local storage.
-export async function logout() {
-  clearTokenUser();
-  window.location.reload();
+// Function which logs a user out, takes a callback which is used to update user state.
+export function logout(setUserCallback: (user: null) => void) {
+  // nulls user in localstorage
+  clearUser();
+  setUserCallback(null);
 }

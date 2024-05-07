@@ -1,12 +1,12 @@
 import { User } from "./types";
 
 // Stringifies the user and stores in local storage.
-export function setUser(user: User) {
+export function setUser(user: User | null) {
   localStorage.setItem("user", JSON.stringify(user));
 }
 
 // Returns User object or the void if no user or invalid user is found.
-export function getUser(): User | void {
+export function getUser(): User | null {
   const user = localStorage.getItem("user");
 
   if (user) {
@@ -15,24 +15,11 @@ export function getUser(): User | void {
       return userObj as User;
     }
   }
+
+  return null;
 }
 
-// Stores the token in local storage.
-export function setToken(token: string) {
-  localStorage.setItem("token", token);
-}
-
-// Returns token or void if no token is found.
-export function getToken(): string | void {
-  const token = localStorage.getItem("token");
-
-  if (token) {
-    return token;
-  }
-}
-
-// Clears the local storage for token and user.
-export function clearTokenUser() {
-  localStorage.removeItem("token");
+// Clears the local storage user.
+export function clearUser() {
   localStorage.removeItem("user");
 }

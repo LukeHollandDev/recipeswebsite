@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent, useContext } from "react";
 import {
   createFileRoute,
   Link,
@@ -7,7 +7,8 @@ import {
 } from "@tanstack/react-router";
 import axios from "axios";
 import { User } from "../util/types";
-import { isAuthenticated, login } from "../util/authentication";
+import { isAuthenticated } from "../util/authentication";
+import UserContext from "../util/userContext";
 
 interface UserLogin {
   username: string;
@@ -24,7 +25,9 @@ export const Route = createFileRoute("/login")({
   },
   component: () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [user, setUser] = useState<UserLogin>({
+    const { setUser } = useContext(UserContext);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [userLogin, setUserLogin] = useState<UserLogin>({
       username: "",
       password: "",
     });
@@ -34,18 +37,18 @@ export const Route = createFileRoute("/login")({
     const navigate = useNavigate({ from: "/login" });
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-      setUser({ ...user, [event.target.name]: event.target.value });
+      setUserLogin({ ...userLogin, [event.target.name]: event.target.value });
     };
 
     const handleLogin = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       axios
-        .post(`${import.meta.env.VITE_API_URL}/users/login`, user, {
+        .post(`${import.meta.env.VITE_API_URL}/users/login`, userLogin, {
           headers: { "Content-Type": "application/json" },
         })
         .then((response) => {
           if (response.status === 200) {
-            login(response.data as User, response.data.access_token);
+            setUser(response.data as User);
             navigate({ to: "/" });
           }
         })

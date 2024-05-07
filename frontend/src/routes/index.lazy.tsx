@@ -1,10 +1,14 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { useContext } from "react";
+import UserContext from "../util/userContext";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
 });
 
 function Index() {
+  const { user } = useContext(UserContext);
+
   return (
     <>
       <div className="rounded bg-base-200 text-justify py-6 mb-6">
@@ -26,7 +30,7 @@ function Index() {
           </div>
         </div>
       </div>
-      recipes go here!
+      Hello {user?.username}
     </>
   );
 }
