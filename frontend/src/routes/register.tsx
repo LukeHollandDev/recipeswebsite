@@ -1,21 +1,23 @@
-import { useState, FormEvent, ChangeEvent, useContext } from "react";
 import {
-  createFileRoute,
   Link,
+  createFileRoute,
   redirect,
   useNavigate,
 } from "@tanstack/react-router";
+import { isAuthenticated } from "../util/authentication";
+import { ChangeEvent, FormEvent, useContext, useState } from "react";
+import UserContext from "../util/userContext";
 import axios from "axios";
 import { User } from "../util/types";
-import { isAuthenticated } from "../util/authentication";
-import UserContext from "../util/userContext";
 
-interface UserLogin {
+interface UserRegister {
   username: string;
+  email: string;
   password: string;
+  password_confirm: string;
 }
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/register")({
   beforeLoad: async () => {
     if (await isAuthenticated()) {
       throw redirect({
@@ -27,9 +29,11 @@ export const Route = createFileRoute("/login")({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { setUser } = useContext(UserContext);
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [userLogin, setUserLogin] = useState<UserLogin>({
+    const [userRegister, setUserRegister] = useState<UserRegister>({
       username: "",
+      email: "",
       password: "",
+      password_confirm: "",
     });
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [error, setError] = useState("");
@@ -37,13 +41,21 @@ export const Route = createFileRoute("/login")({
     const navigate = useNavigate({ from: "/login" });
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-      setUserLogin({ ...userLogin, [event.target.name]: event.target.value });
+      setUserRegister({
+        ...userRegister,
+        [event.target.name]: event.target.value,
+      });
     };
 
-    const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+    const handleRegister = (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      // passwords both match
+      if (userRegister.password !== userRegister.password_confirm) {
+        setError("Passwords do not match, please ensure they match.");
+        return;
+      }
       axios
-        .post(`${import.meta.env.VITE_API_URL}/users/login`, userLogin, {
+        .post(`${import.meta.env.VITE_API_URL}/users/register`, userRegister, {
           headers: { "Content-Type": "application/json" },
         })
         .then((response) => {
@@ -53,19 +65,17 @@ export const Route = createFileRoute("/login")({
           }
         })
         .catch((error) => {
-          const { status, data } = error.response;
-          if (status === 401) {
-            setError(data.detail);
-          }
+          const { data } = error.response;
+          setError(data.detail);
         });
     };
 
     return (
       <div className="max-w-lg m-auto">
         <h1 className="text-2xl font-bold text-center">
-          Login to your Hello Freshed 2 account!
+          Create a Hello Freshed 2 account!
         </h1>
-        <form onSubmit={handleLogin} className="card-body">
+        <form onSubmit={handleRegister} className="card-body">
           <div className="form-control">
             <label className="label">
               <span className="label-text">Username</span>
@@ -74,6 +84,20 @@ export const Route = createFileRoute("/login")({
               name="username"
               type="text"
               placeholder="Enter your username here..."
+              className="input input-bordered"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Email</span>
+            </label>
+            <input
+              name="email"
+              type="email"
+              placeholder="Enter your email here..."
               className="input input-bordered"
               onChange={handleChange}
               required
@@ -94,6 +118,17 @@ export const Route = createFileRoute("/login")({
             />
           </div>
 
+          <div className="form-control">
+            <input
+              name="password_confirm"
+              type="password"
+              placeholder="Confirm your password here..."
+              className="input input-bordered"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
           {error ? (
             <div role="alert" className="alert alert-error mt-3">
               <span>{error}</span>
@@ -101,10 +136,10 @@ export const Route = createFileRoute("/login")({
           ) : null}
 
           <div className="form-control mt-3 gap-2">
-            <button className="btn btn-primary">Login</button>
+            <button className="btn btn-primary">Create Account</button>
           </div>
-          <Link to="/register" className="btn btn-base-300">
-            Register
+          <Link to="/login" className="btn btn-base-300">
+            Already have an account? Login!
           </Link>
         </form>
       </div>
