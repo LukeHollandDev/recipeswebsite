@@ -16,6 +16,7 @@ class UserRegister(SQLModel):
     username: str
     email: str
     password: str
+    password_confirm: str
 
 
 class UserLogin(SQLModel):

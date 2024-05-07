@@ -38,10 +38,17 @@ def register_user(
             status_code=400, detail="Email is not a valid email address."
         )
 
+    # Passwords match
+    if user.password != user.password_confirm:
+        raise HTTPException(
+            status_code=400, detail="Passwords do not match, please ensure they match"
+        )
+
     # Check the password meets requirements
     if not is_valid_password(user.password):
         raise HTTPException(
-            status_code=400, detail="Password does not meet requirements."
+            status_code=400,
+            detail="Password does not meet requirements. Requires mix of upper/lower case letters, numbers and special characters.",
         )
 
     # Check that username and email are not in use
@@ -69,7 +76,7 @@ def register_user(
     # Return user (without the password_hash) and set-cookie header with token
     response.set_cookie(key="access_token", value=f"{token}", httponly=True)
     return {
-        **existing_user.model_dump(exclude={"password_hash": True}),
+        **new_user.model_dump(exclude={"password_hash": True}),
         "access_token": token,
     }
 
