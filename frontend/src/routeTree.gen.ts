@@ -19,15 +19,9 @@ import { Route as RecipeRecipeIdImport } from './routes/recipe/$recipeId'
 
 // Create Virtual Routes
 
-const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
-
-const AboutLazyRoute = AboutLazyImport.update({
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
 const RegisterRoute = RegisterImport.update({
   path: '/register',
@@ -65,10 +59,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/recipe/$recipeId': {
       preLoaderRoute: typeof RecipeRecipeIdImport
       parentRoute: typeof rootRoute
@@ -82,7 +72,6 @@ export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   LoginRoute,
   RegisterRoute,
-  AboutLazyRoute,
   RecipeRecipeIdRoute,
 ])
 

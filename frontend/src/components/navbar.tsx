@@ -3,7 +3,7 @@ import { useContext } from "react";
 import UserContext from "../util/userContext";
 import { logout } from "../util/authentication";
 
-export default function Navbar({ Links }: { Links: JSX.Element[] }) {
+export default function Navbar() {
   const { user, setUser } = useContext(UserContext);
 
   return (
@@ -14,19 +14,14 @@ export default function Navbar({ Links }: { Links: JSX.Element[] }) {
         </Link>
       </div>
 
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal mx-4 gap-2">
-          {Links.map((Link, index) => (
-            <li key={`nav-link-${index}`}>{Link}</li>
-          ))}
-        </ul>
-      </div>
-
       <div className="navbar-end">
         {user ? (
-          <button onClick={() => logout(setUser)} className="btn btn-ghost">
-            Logout
-          </button>
+          <>
+            <p className="font-bold mx-2">{user.username}</p>
+            <button onClick={() => logout(setUser)} className="btn btn-ghost">
+              Logout
+            </button>
+          </>
         ) : (
           <Link to="/login" className="btn btn-ghost">
             Login
