@@ -15,7 +15,7 @@ export default function RecipeCard({
   const { user, userFavourites, setUserFavourites } = useContext(UserContext);
 
   return (
-    <div className="card card-compact bg-base-200 grow sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
+    <div className="card card-compact bg-base-200">
       <figure>
         <img
           className="recipe-image"

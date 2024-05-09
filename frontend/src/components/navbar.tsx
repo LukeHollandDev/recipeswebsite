@@ -17,8 +17,16 @@ export default function Navbar() {
       <div className="navbar-end">
         {user ? (
           <>
-            <p className="font-bold mx-2">{user.username}</p>
-            <button onClick={() => logout(setUser)} className="btn btn-ghost">
+            <Link
+              to="/favourites"
+              className="btn btn-sm btn-primary font-bold mx-2"
+            >
+              {user.username}
+            </Link>
+            <button
+              onClick={() => logout(setUser)}
+              className="btn btn-sm btn-ghost"
+            >
               Logout
             </button>
           </>
