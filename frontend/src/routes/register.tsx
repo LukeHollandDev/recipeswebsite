@@ -73,7 +73,7 @@ export const Route = createFileRoute("/register")({
     return (
       <div className="max-w-lg m-auto">
         <h1 className="text-2xl font-bold text-center">
-          Create a Hello Freshed 2 account!
+          Create a Recipe Website account!
         </h1>
         <form onSubmit={handleRegister} className="card-body">
           <div className="form-control">

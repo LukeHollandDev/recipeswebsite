@@ -10,7 +10,7 @@ export default function Navbar() {
     <div className="navbar bg-base-100">
       <div className="navbar-start">
         <Link to="/" className="btn btn-ghost text-xl">
-          Hello Freshed 2
+          Recipe Website
         </Link>
       </div>
 

@@ -63,7 +63,7 @@ export const Route = createFileRoute("/login")({
     return (
       <div className="max-w-lg m-auto">
         <h1 className="text-2xl font-bold text-center">
-          Login to your Hello Freshed 2 account!
+          Login to your Recipe Website account!
         </h1>
         <form onSubmit={handleLogin} className="card-body">
           <div className="form-control">

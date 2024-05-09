@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { useContext } from "react";
 import UserContext from "../util/userContext";
 import { toggleFavourite } from "../util/favourite";
+import { logoLoader } from "../util/logoLoader";
 
 export default function RecipeCard({
   recipe,
@@ -16,12 +17,19 @@ export default function RecipeCard({
 
   return (
     <div className="card card-compact bg-base-200">
-      <figure>
+      <figure className="relative">
         <img
           className="recipe-image"
           src={recipe.image ?? recipeFallbackImage}
           alt={recipe.title}
         />
+        {logoLoader(recipe.url) ? (
+          <img
+            className="absolute top-0 right-0 h-10 m-2"
+            src={logoLoader(recipe.url)}
+            alt="Recipe Logo"
+          />
+        ) : null}
       </figure>
       <div className="card-body">
         <h2 className="card-title">{recipe.title}</h2>

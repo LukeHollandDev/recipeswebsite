@@ -1,4 +1,4 @@
-import os, json, time
+import os, json, time, random
 from sqlmodel import create_engine, Session
 
 from models import Recipe, Nutrient, Ingredient, Instruction, Resource
@@ -12,6 +12,9 @@ for root, _, files in os.walk(os.path.join("..", "recipes")):
             with open(file_path, "r") as f:
                 data = json.load(f)
                 recipes.extend(data)
+
+# Randomise the recipes
+random.shuffle(recipes)
 
 # Get the database URL from the environment variable
 database_url = os.environ.get("DATABASE_URL")
@@ -113,7 +116,7 @@ with Session(engine) as session:
         session.commit()
 
     # Reset print, by printing final progress bar
-    print(f"{recipe_count} / {recipe_count}")
+    print(f"Recipe: {recipe_count} / {recipe_count}")
 
 # Calculate and print the total time taken
 total_time = time.time() - start_time

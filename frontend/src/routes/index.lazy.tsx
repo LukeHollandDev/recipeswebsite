@@ -17,7 +17,7 @@ function Index() {
   useEffect(() => {
     // get recipes from api using skip param
     axios
-      .get(`${import.meta.env.VITE_API_URL}/recipes?skip=${skip}&limit=24`, {
+      .get(`${import.meta.env.VITE_API_URL}/recipes?skip=${skip}&limit=500`, {
         headers: { "Content-Type": "application/json" },
       })
       .then((response) => {
@@ -36,7 +36,7 @@ function Index() {
     <>
       <div className="rounded bg-base-200 text-center p-6 mb-6">
         <div className="max-w-xl mx-auto">
-          <h1 className="text-4xl font-bold">Hello Freshed 2</h1>
+          <h1 className="text-4xl font-bold">Recipe Website</h1>
           <p className="pt-4">
             A website which brings together recipes from a variety of sources!
           </p>
