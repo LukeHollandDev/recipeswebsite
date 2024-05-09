@@ -1,5 +1,5 @@
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import UserContext from "../util/userContext";
 import Recipes from "../components/recipes";
 import axios from "axios";
@@ -12,14 +12,15 @@ export const Route = createLazyFileRoute("/")({
 function Index() {
   const { user, userFavourites } = useContext(UserContext);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [skip] = useState(0);
 
-  useEffect(() => {
-    // get recipes from api using skip param
+  const getRecipes = useCallback(async () => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}/recipes?skip=${skip}&limit=500`, {
-        headers: { "Content-Type": "application/json" },
-      })
+      .get(
+        `${import.meta.env.VITE_API_URL}/recipes?skip=${recipes.length}&limit=24`,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      )
       .then((response) => {
         if (response.status === 200) {
           setRecipes([...recipes, ...response.data]);
@@ -29,8 +30,12 @@ function Index() {
         // TODO: handle errors properly!
         console.log(error);
       });
+  }, [recipes]);
+
+  useEffect(() => {
+    getRecipes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [skip]);
+  }, []);
 
   return (
     <>
