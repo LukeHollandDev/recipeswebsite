@@ -222,10 +222,17 @@ def favourite_recipe(
         )
 
     # Add recipe to the user's favourites
-    db_session.add(Favourite.Favourite(user_id=user.id, recipe_id=recipe.id))
+    new_favourite = Favourite.Favourite(user_id=user.id, recipe_id=recipe.id)
+    db_session.add(new_favourite)
     db_session.commit()
 
-    return {"message": "Successfully favourited the recipe."}
+    return {
+        "recipe_id": new_favourite.recipe_id,
+        "added_time": new_favourite.added_time,
+        "user_id": new_favourite.user_id,
+        "id": new_favourite.id,
+        "recipe": new_favourite.recipe,
+    }
 
 
 @router.delete("/favourite/{recipe_id}")

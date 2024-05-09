@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Recipe } from "../util/types";
+import { Favourite, Recipe } from "../util/types";
 import RecipeCard from "./recipeCard";
 
-export default function Recipes() {
+export default function Recipes({ favourites }: { favourites: Favourite[] }) {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [skip] = useState(0);
 
@@ -29,7 +29,15 @@ export default function Recipes() {
     <div>
       <div className="flex flex-wrap gap-4">
         {recipes.map((recipe: Recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
+          <RecipeCard
+            key={recipe.id}
+            recipe={recipe}
+            isFavourite={
+              !!favourites.find(
+                (favourite: Favourite) => favourite.recipe_id === recipe.id
+              )
+            }
+          />
         ))}
       </div>
     </div>

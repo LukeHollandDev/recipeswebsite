@@ -8,7 +8,7 @@ export const Route = createLazyFileRoute("/")({
 });
 
 function Index() {
-  const { user } = useContext(UserContext);
+  const { user, userFavourites } = useContext(UserContext);
 
   return (
     <>
@@ -31,7 +31,7 @@ function Index() {
           ) : null}
         </div>
       </div>
-      <Recipes />
+      <Recipes favourites={userFavourites} />
     </>
   );
 }

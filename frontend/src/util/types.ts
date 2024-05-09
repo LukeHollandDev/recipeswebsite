@@ -18,6 +18,14 @@ export type Recipe = {
   servings: number | null;
 };
 
+export type Favourite = {
+  recipe_id: number;
+  added_time: string;
+  user_id: number;
+  id: number;
+  recipe: Recipe;
+};
+
 export type Nutriant = {
   recipe_id: number;
   amount: number;
