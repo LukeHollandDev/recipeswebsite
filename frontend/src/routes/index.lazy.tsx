@@ -1,8 +1,9 @@
 import { Link, createLazyFileRoute } from "@tanstack/react-router";
 import { useCallback, useContext, useEffect, useState } from "react";
+import axios from "axios";
+import InfiniteScroll from "react-infinite-scroll-component";
 import UserContext from "../util/userContext";
 import Recipes from "../components/recipes";
-import axios from "axios";
 import { Recipe } from "../util/types";
 
 export const Route = createLazyFileRoute("/")({
@@ -57,7 +58,15 @@ function Index() {
           ) : null}
         </div>
       </div>
-      <Recipes recipes={recipes} favourites={userFavourites} />
+
+      <InfiniteScroll
+        next={getRecipes}
+        hasMore={true}
+        loader={<p>Loading more recipes...</p>}
+        dataLength={recipes.length}
+      >
+        <Recipes recipes={recipes} favourites={userFavourites} />
+      </InfiniteScroll>
     </>
   );
 }
