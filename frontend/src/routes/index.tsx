@@ -1,4 +1,4 @@
-import { Link, createLazyFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -6,35 +6,59 @@ import UserContext from "../util/userContext";
 import Recipes from "../components/recipes";
 import { Recipe } from "../util/types";
 
-export const Route = createLazyFileRoute("/")({
+export const Route = createFileRoute("/")({
   component: Index,
+  onStay: () => {
+    sessionStorage.removeItem("scrollPosition");
+  },
+  onLeave: () => {
+    sessionStorage.setItem("scrollPosition", JSON.stringify(window.scrollY));
+  },
 });
 
 function Index() {
   const { user, userFavourites } = useContext(UserContext);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
-  const getRecipes = useCallback(async () => {
-    axios
-      .get(
-        `${import.meta.env.VITE_API_URL}/recipes?skip=${recipes.length}&limit=24`,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          setRecipes([...recipes, ...response.data]);
-        }
-      })
-      .catch((error) => {
-        // TODO: handle errors properly!
-        console.log(error);
-      });
-  }, [recipes]);
+  const getRecipes = useCallback(
+    async (firstLoad: boolean) => {
+      axios
+        .get(
+          `${import.meta.env.VITE_API_URL}/recipes?skip=${recipes.length}&limit=24`,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            setRecipes([...recipes, ...response.data]);
+            if (firstLoad) {
+              // set scroll position
+              if (sessionStorage.getItem("scrollPosition")) {
+                window.scrollTo(
+                  0,
+                  JSON.parse(sessionStorage.getItem("scrollPosition") ?? "0")
+                );
+                if (
+                  window.scrollY ===
+                  JSON.parse(sessionStorage.getItem("scrollPosition") ?? "0")
+                ) {
+                  sessionStorage.removeItem("scrollPosition");
+                }
+              }
+            }
+          }
+        })
+        .catch((error) => {
+          // TODO: handle errors properly!
+          console.log(error);
+        });
+    },
+    [recipes]
+  );
 
   useEffect(() => {
-    getRecipes();
+    getRecipes(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -60,7 +84,7 @@ function Index() {
       </div>
 
       <InfiniteScroll
-        next={getRecipes}
+        next={() => getRecipes(false)}
         hasMore={true}
         loader={<p>Loading more recipes...</p>}
         dataLength={recipes.length}
