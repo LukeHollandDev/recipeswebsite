@@ -46,5 +46,5 @@ jobs:
             "LETSENCRYPT_HOST=recipes.lukeholland.dev"
 
       - name: Hello world
-          run: echo ${{ steps.meta.outputs.tags }}
+        run: echo ${{ steps.meta.outputs.tags }}
       # Backend Image
