@@ -15,6 +15,8 @@ origins = [
     "https://lukeholland.dev",
     "http://recipes.lukeholland.dev",
     "https://recipes.lukeholland.dev",
+    "http://api.recipes.lukeholland.dev",
+    "https://api.recipes.lukeholland.dev",
 ]
 
 app = FastAPI()
