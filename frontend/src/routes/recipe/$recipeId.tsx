@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Favourite, RecipeFull } from "../../util/types";
+import { Favourite, Instruction, RecipeFull } from "../../util/types";
 import recipeFallbackImage from "../../assets/recipe-fallback.png";
 import UserContext from "../../util/userContext";
 import { toggleFavourite } from "../../util/favourite";
@@ -185,17 +185,19 @@ function RecipeComponent() {
                 </h3>
               ) : null}
               <div>
-                {instruction_group.instructions.map((instruction) => (
-                  <div key={instruction.id} className="mb-4">
-                    <p className="font-bold bg-accent rounded p-1 inline">
-                      Step {instruction.index + 1}
-                    </p>
-                    <p className="mt-1">{instruction.text}</p>
-                    {instruction.image ? (
-                      <img src={instruction.image} className="mt-2 rounded" />
-                    ) : null}
-                  </div>
-                ))}
+                {instruction_group.instructions
+                  .sort((a: Instruction, b: Instruction) => a.index - b.index)
+                  .map((instruction) => (
+                    <div key={instruction.id} className="mb-4">
+                      <p className="font-bold bg-accent rounded p-1 inline">
+                        Step {instruction.index + 1}
+                      </p>
+                      <p className="mt-1">{instruction.text}</p>
+                      {instruction.image ? (
+                        <img src={instruction.image} className="mt-2 rounded" />
+                      ) : null}
+                    </div>
+                  ))}
               </div>
             </div>
           ))}
