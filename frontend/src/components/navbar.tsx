@@ -7,7 +7,7 @@ export default function Navbar() {
   const { user, setUser } = useContext(UserContext);
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 sticky top-0 z-50">
       <div className="navbar-start">
         <Link to="/" className="btn btn-ghost text-xl">
           Recipe Website

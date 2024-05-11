@@ -61,7 +61,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, userFavourites, setUserFavourites }}
+      value={{
+        user,
+        setUser,
+        userFavourites,
+        setUserFavourites,
+      }}
     >
       {children}
     </UserContext.Provider>

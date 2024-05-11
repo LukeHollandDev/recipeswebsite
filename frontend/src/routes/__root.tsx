@@ -11,6 +11,12 @@ export const Route = createRootRoute({
         <main className="p-6 max-w-screen-xl m-auto">
           <Outlet />
         </main>
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="sticky absolute bottom-4 right-4 btn btn-accent block max-w-max ml-auto"
+        >
+          Scroll to top
+        </button>
       </UserProvider>
     );
   },
