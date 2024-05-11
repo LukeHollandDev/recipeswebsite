@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import APIRouter, Depends, Query, HTTPException
-from sqlmodel import Session, select
+from sqlmodel import Session, and_, or_, select
 from models.Recipe import Recipe
 from database import get_session
 
@@ -52,6 +52,35 @@ def get_recipe_by_id(id: int, db_session: Session = Depends(get_session)):
 def get_recipes(
     skip: int = Query(default=0, ge=0),
     limit: int = Query(default=10, ge=1),
+    query: str = Query(default=None),
+    source_filter: str = Query(default=None),
     db_session: Session = Depends(get_session),
 ):
-    return db_session.exec(select(Recipe).offset(skip).limit(limit)).all()
+
+    # Source filter, which will check if the source is inside of the URL
+    source_condition = True
+    if source_filter:
+        source_condition = Recipe.url.ilike(f"%{source_filter}%")
+
+    if query:
+        # Create OR conditions for keyword being inside of either title or description
+        conditions = [
+            or_(
+                Recipe.title.ilike(f"%{keyword}%"),
+                Recipe.description.ilike(f"%{keyword}%"),
+            )
+            for keyword in query.split()
+        ]
+        recipes = db_session.exec(
+            select(Recipe)
+            .filter(and_(*conditions))
+            .filter(source_condition)
+            .offset(skip)
+            .limit(limit)
+        ).all()
+    else:
+        recipes = db_session.exec(
+            select(Recipe).filter(source_condition).offset(skip).limit(limit)
+        ).all()
+
+    return recipes
