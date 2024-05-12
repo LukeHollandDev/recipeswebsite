@@ -4,10 +4,10 @@ This directory contains the application which will perform the scraping of recip
 
 ### Technology
 
-* Python 3
-  * Requests
-* Black formatter for Python 3
-  * https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
+- Python 3
+  - Requests
+- Black formatter for Python 3
+  - https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter
 
 ### Usage
 
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 Run the script, specifying the output location, config to use:
 
 ```bash
-python main.py --output "../recipes" --config "hellofresh"
+python main.py --output "../backend/recipes" --config "hellofresh"
 ```
 
 Once executed the script will show the progress in the terminal / command prompt and then will store the recipes inside of the output directory provided in the command. They will be stored in the in a directory named the same as the config used.
@@ -49,8 +49,8 @@ The code will automatically check for duplicates if any exists and will only sto
 
 ### Available Configurations
 
-* `hellofresh`
-* `justonecookbook`
+- `hellofresh`
+- `justonecookbook`
 
 ### Recipe Data Model
 
@@ -58,4 +58,4 @@ The model can be found in the Pydantic model file: `models/Recipe.py`.
 
 This is the structure the configurations use to structure their recipes before storing them in the file.
 
-You can find examples of these recipe files inside of `recipes` directory.
+You can find examples of these recipe files inside of `backend/recipes` directory.

@@ -5,7 +5,7 @@ from models import Recipe, Nutrient, Ingredient, Instruction, Resource
 
 # Combine recipes from "recipes" directory and store in array
 recipes = []
-for root, _, files in os.walk(os.path.join("..", "recipes")):
+for root, _, files in os.walk("recipes"):
     for file in files:
         if file == "recipes.json":
             file_path = os.path.join(root, file)

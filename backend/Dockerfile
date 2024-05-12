@@ -14,8 +14,5 @@ RUN apt-get update && apt-get clean
 # add app
 COPY . .
 
-# add recipe data (to /usr/src)
-COPY ../recipes /usr/src/recipes
-
 # install python dependencies
 RUN pip install -r requirements.txt
