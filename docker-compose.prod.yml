@@ -23,7 +23,7 @@ services:
 
   api:
     image: ghcr.io/lukehollanddev/recipeswebsite-backend:main
-    command: bash -c "alembic upgrade head && uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    command: tail -F anything
     volumes:
       - ./backend:/usr/src/app
       - ./recipes:/usr/src/recipes
