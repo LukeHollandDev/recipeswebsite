@@ -30,9 +30,9 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
 
-          # Frontend Image
+      # Frontend Image
       - name: Build and push frontend Docker image
-        id: push
+        id: push-frontend
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
@@ -46,3 +46,12 @@ jobs:
             "LETSENCRYPT_HOST=recipes.lukeholland.dev"
 
       # Backend Image
+      - name: Build and push frontend Docker image
+        id: push-backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ghcr.io/lukehollanddev/recipeswebsite-backend:main
+          labels: ${{ steps.meta.outputs.labels }}
