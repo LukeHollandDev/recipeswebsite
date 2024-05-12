@@ -12,6 +12,8 @@ services:
       interval: 3s
       timeout: 5s
       retries: 5
+    volumes:
+      - /recipes-website/database/data:/var/lib/postgresql/data
 
   website:
     image: ghcr.io/lukehollanddev/recipeswebsite-frontend:main
