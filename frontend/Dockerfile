@@ -4,10 +4,6 @@ FROM node:20 as build
 # Set environment variables
 ARG VITE_API_URL
 ENV VITE_API_URL ${VITE_API_URL}
-ARG VIRTUAL_HOST
-ENV VIRTUAL_HOST ${VIRTUAL_HOST}
-ARG LETSENCRYPT_HOST
-ENV LETSENCRYPT_HOST ${LETSENCRYPT_HOST}
 
 # Set the working directory in the container
 WORKDIR /app
@@ -25,8 +21,6 @@ RUN npm run build
 FROM nginx:alpine
 
 # Set environment variables
-ARG VITE_API_URL
-ENV VITE_API_URL ${VITE_API_URL}
 ARG VIRTUAL_HOST
 ENV VIRTUAL_HOST ${VIRTUAL_HOST}
 ARG LETSENCRYPT_HOST
