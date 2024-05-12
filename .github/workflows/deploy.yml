@@ -41,7 +41,7 @@ jobs:
           tags: ghcr.io/lukehollanddev/recipeswebsite-frontend:main
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            "VITE_API_URL=api.recipes.lukeholland.dev"
+            "VITE_API_URL=https://api.recipes.lukeholland.dev"
             "VIRTUAL_HOST=recipes.lukeholland.dev"
             "LETSENCRYPT_HOST=recipes.lukeholland.dev"
 
