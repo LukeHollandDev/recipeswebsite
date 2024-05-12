@@ -30,6 +30,9 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
 
+      - name: Hello world
+        run: echo ${{ steps.meta.outputs.tags }}
+
       # Frontend Image
       - name: Build and push frontend Docker image
         id: push
@@ -45,6 +48,4 @@ jobs:
             "VIRTUAL_HOST=recipes.lukeholland.dev"
             "LETSENCRYPT_HOST=recipes.lukeholland.dev"
 
-      - name: Hello world
-          run: echo ${{ steps.meta.outputs.tags }}
       # Backend Image
