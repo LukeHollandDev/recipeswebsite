@@ -46,7 +46,7 @@ jobs:
             "LETSENCRYPT_HOST=recipes.lukeholland.dev"
 
       # Backend Image
-      - name: Build and push frontend Docker image
+      - name: Build and push backend Docker image
         id: push-backend
         uses: docker/build-push-action@v5
         with:
