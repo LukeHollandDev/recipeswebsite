@@ -30,10 +30,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
 
-      - name: Hello world
-        run: echo ${{ steps.meta.outputs.tags }}
-
-      # Frontend Image
+          # Frontend Image
       - name: Build and push frontend Docker image
         id: push
         uses: docker/build-push-action@v5
@@ -41,7 +38,7 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ghcr.io/lukehollanddev/recipeswebsite-frontend:main
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             "VITE_API_URL=api.recipes.lukeholland.dev"

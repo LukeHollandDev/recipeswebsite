@@ -1,5 +1,5 @@
 # Use the official Node.js runtime as the base image
-FROM node:18 as build
+FROM node:20 as build
 
 # Set environment variables
 ARG VITE_API_URL
@@ -12,14 +12,11 @@ ENV LETSENCRYPT_HOST ${LETSENCRYPT_HOST}
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+# Copy the entire application code to the container
+COPY . .
 
 # Install dependencies
 RUN npm install
-
-# Copy the entire application code to the container
-COPY . .
 
 # Build the React app for production
 RUN npm run build
